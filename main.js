@@ -1,7 +1,7 @@
 var nameInput = document.getElementById('name');
 var emailInput = document.getElementById('email');
 var phoneInput = document.getElementById('phone');
-var form = document.getElementById('form');
+var form = document.getElementById('my-form');
 var userList = document.getElementById('users');
 
 var users = JSON.parse(localStorage.getItem('users')) ||  [];
