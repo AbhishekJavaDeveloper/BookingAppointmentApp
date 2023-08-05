@@ -14,14 +14,20 @@ function displayUsers() {
   userList.innerHTML = '';
   users.forEach(function (user, index) {
     var li = document.createElement('li');
-    li.innerHTML = `Name: ${user.name}, Email: ${user.email}, Phone: ${user.phone} <button class="delete-btn" data-index="${index}">Delete</button>`;
+    li.innerHTML = `Name: ${user.name}, Email: ${user.email}, Phone: ${user.phone} 
+    <button class="delete-btn" data-index="${index}">Delete</button>
+    <button class="edit-btn" data-index="${index}">Edit</button>`;
     userList.appendChild(li);
   });
 
-  // Add click event listeners to all delete buttons
   var deleteButtons = document.getElementsByClassName('delete-btn');
   for (var i = 0; i < deleteButtons.length; i++) {
     deleteButtons[i].addEventListener('click', handleDelete);
+  }
+
+  var editButtons = document.getElementsByClassName('edit-btn');
+  for (var i = 0; i < editButtons.length; i++) {
+    editButtons[i].addEventListener('click', handleEdit);
   }
 }
 
@@ -37,18 +43,37 @@ function handleSubmit(event) {
     return;
   }
 
-  var newUser = {
-    name: nameValue,
-    email: emailValue,
-    phone: phoneValue,
-  };
+  var index = form.getAttribute('data-index');
+  if (index === null) {
+    var newUser = {
+      name: nameValue,
+      email: emailValue,
+      phone: phoneValue,
+    };
+    users.push(newUser);
+  } 
+  else {
+    users[index].name = nameValue;
+    users[index].email = emailValue;
+    users[index].phone = phoneValue;
+    form.removeAttribute('data-index');
+  }
 
-  users.push(newUser);
   saveToLocalStorage(users);
   displayUsers();
 
   form.reset();
 }
+
+function handleEdit(event) {
+    var index = event.target.getAttribute('data-index');
+    if (index !== null) {
+      nameInput.value = users[index].name;
+      emailInput.value = users[index].email;
+      phoneInput.value = users[index].phone;
+      form.setAttribute('data-index', index);
+    }
+  }
 
 function handleDelete(event) {
   var index = event.target.getAttribute('data-index');
